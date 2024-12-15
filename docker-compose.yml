@@ -1,0 +1,42 @@
+version: '3'
+services:
+  service-admin:
+    build:
+      context: ./service-admin
+    ports:
+      - "4001:4001"
+    networks:
+      - flight_network
+
+  service-user:
+    build:
+      context: ./service-user
+    ports:
+      - "4002:4002"
+    networks:
+      - flight_network
+
+  service-payment:
+    build:
+      context: ./service-payment
+    ports:
+      - "4003:4003"
+    networks:
+      - flight_network
+
+  api-gateway:
+    build:
+      context: ./api-gateway
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    depends_on:
+      - service-admin
+      - service-user
+      - service-payment
+    networks:
+      - flight_network
+
+networks:
+  flight_network:
+    driver: bridge
